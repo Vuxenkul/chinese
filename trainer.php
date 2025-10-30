@@ -157,197 +157,249 @@ $hash = substr(sha1($json), 0, 8);
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --bg:#020817;--bg-secondary:#0a1d3a;--card:#0d1730;--muted:#9ca3af;--fg:#f8fafc;--acc:#3b82f6;--acc2:#22d3ee;--good:#22c55e;
-    --bad:#ef4444;--warn:#f59e0b;--chip:#102041;--chip2:#0b1630;
+    --bg:#f3f7f5;
+    --bg-accent:#dff3eb;
+    --surface:#ffffff;
+    --surface-soft:#f7fbf9;
+    --primary:#1d9a6c;
+    --primary-dark:#147555;
+    --accent:#f4a261;
+    --accent-soft:rgba(244,162,97,.16);
+    --text:#15323b;
+    --muted:#5f7a83;
+    --outline:rgba(29,154,108,.18);
+    --shadow:0 22px 40px rgba(34,76,57,.16);
+    --radius:26px;
+    --font:'Inter','SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   }
   *{box-sizing:border-box}
-  body.app-shell{margin:0;background:radial-gradient(circle at top,var(--bg-secondary),var(--bg));color:var(--fg);font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column}
-  main.app-main{flex:1;display:flex}
-  header{padding:16px;border-bottom:1px solid rgba(59,130,246,.2);background:rgba(3,8,24,.92);backdrop-filter:blur(18px);position:sticky;top:0;z-index:40}
-  header .wrap{padding:0}
-  .wrap{width:100%;margin:0 auto;padding:18px 16px 26px;max-width:1024px}
-  h1{margin:0;font-size:24px;letter-spacing:.4px;display:flex;align-items:center;gap:10px}
-  h1 span{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:18px}
-  .row{display:flex;gap:12px;flex-direction:column;align-items:stretch}
-  .grow{flex:1}
-  .card{position:relative;background:linear-gradient(160deg,rgba(17,31,67,.92),rgba(9,20,44,.85));border:1px solid rgba(59,130,246,.24);border-radius:22px;padding:20px;box-shadow:0 18px 40px rgba(15,23,42,.35);overflow:hidden}
-  .card::after{content:"";position:absolute;inset:0;border-radius:22px;border:1px solid rgba(56,189,248,.08);pointer-events:none}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(15,118,255,.12);border:1px solid rgba(37,99,235,.4);border-radius:999px;padding:7px 12px;color:#dbeafe;font-size:12px;text-transform:uppercase;letter-spacing:.08em;align-self:flex-start}
-  input[type=file]{color:#e0f2fe}
-  .btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(59,130,246,.35);transition:transform .15s ease,box-shadow .15s ease;width:100%;text-align:center}
-  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(59,130,246,.45)}
-  .btn:disabled{opacity:.6;cursor:not-allowed;box-shadow:none;transform:none}
-  .btn.secondary{background:linear-gradient(135deg,#0f172a,#1e293b);box-shadow:none;border:1px solid rgba(148,163,184,.3)}
-  .select, select, input[type=number], input[type=text]{background:rgba(13,23,48,.85);border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:11px 14px;color:#e0f2fe;width:100%}
-  .flex{display:flex}
-  .col{display:flex;flex-direction:column;gap:6px}
-  .gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}.gap-24{gap:24px}
-  .grid{display:flex;flex-direction:column;gap:18px}
-  .g-2,.g-3{gap:18px}
+  body.app-shell{margin:0;background:linear-gradient(180deg,#f6fffb 0%,#e8f2ff 100%);font-family:var(--font);color:var(--text);min-height:100vh;display:flex;justify-content:center;padding:28px 16px}
+  main.app-content{display:flex;flex-direction:column;gap:20px}
+  .app-frame{width:min(420px,100%);display:flex;flex-direction:column;gap:20px}
+  header.app-header{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 0}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-icon{display:inline-flex;width:48px;height:48px;border-radius:18px;background:linear-gradient(145deg,#1d9a6c,#4cc28b);color:#fff;font-size:24px;align-items:center;justify-content:center;box-shadow:0 15px 30px rgba(29,154,108,.25)}
+  .brand-text{display:flex;flex-direction:column}
+  .brand-text strong{font-size:18px}
+  .brand-text span{font-size:13px;color:var(--muted)}
+  .dataset-pill{background:var(--accent-soft);border:1px solid rgba(244,162,97,.35);color:#a65b1e;font-size:12px;padding:10px 14px;border-radius:18px;display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+  .dataset-pill span{font-weight:600;font-size:13px}
+  .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;position:relative;overflow:hidden}
+  .card::after{content:"";position:absolute;inset:0;border-radius:var(--radius);border:1px solid rgba(255,255,255,.6);pointer-events:none;mix-blend-mode:soft-light;opacity:.5}
+  .hero-card{display:flex;flex-direction:column;gap:20px;background:linear-gradient(160deg,#1d9a6c 0%,#40c09d 60%,#90f1b8 110%);color:#f6fffb;overflow:hidden}
+  .hero-card::after{border:none}
+  .hero-top{display:flex;flex-direction:column;gap:10px}
+  .eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:12px;opacity:.7}
+  .hero-top h1{margin:0;font-size:26px;line-height:1.2}
+  .hero-top p{margin:0;font-size:14px;opacity:.85}
+  .hero-actions{display:flex;flex-direction:column;gap:10px}
+  .btn{border:0;border-radius:18px;padding:14px 18px;font-weight:600;font-size:15px;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+  .btn.primary{background:#fff;color:#177957;box-shadow:0 18px 28px rgba(5,52,35,.2)}
+  .btn.primary:hover{transform:translateY(-1px);box-shadow:0 22px 34px rgba(5,52,35,.3)}
+  .btn.primary:disabled{opacity:.6;box-shadow:none;cursor:not-allowed;transform:none}
+  .btn.ghost{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}
+  .btn.ghost:hover{transform:translateY(-1px);background:rgba(255,255,255,.2)}
+  .btn.secondary{background:rgba(24,126,89,.1);color:#177957;border:1px solid rgba(24,126,89,.35);box-shadow:none}
+  .btn.secondary:hover{transform:translateY(-1px);background:rgba(24,126,89,.16)}
+  .setup-card h2{margin:0 0 10px;font-size:18px}
+  .setup-card p.subtitle{margin:0 0 18px;font-size:13px;color:var(--muted)}
+  .form-grid{display:flex;flex-direction:column;gap:16px}
+  .field{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+  .field span{font-weight:600;color:var(--text);font-size:14px}
+  select,input[type=number],input[type=text],input[type=file]{border-radius:16px;border:1px solid var(--outline);padding:12px 14px;font-size:15px;background:var(--surface-soft);color:var(--text);box-shadow:inset 0 1px 2px rgba(20,60,43,.05)}
+  input[type=number]{-moz-appearance:textfield}
+  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{margin:0;-webkit-appearance:none}
+  .checklist{display:flex;flex-wrap:wrap;gap:10px}
+  .toggle{background:var(--surface-soft);border:1px solid var(--outline);border-radius:16px;padding:10px 12px;font-size:13px;color:var(--text);display:flex;align-items:center;gap:8px}
+  .toggle input{accent-color:var(--primary)}
+  .audio-hint{display:flex;flex-direction:column;gap:10px;background:var(--surface-soft);border-radius:18px;padding:12px 14px;margin-top:4px}
+  .audio-row{display:flex;align-items:center;gap:10px}
+  .upload-actions{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+  .upload-actions form{display:flex;flex-direction:column;gap:12px}
+  .upload-actions .btn{width:100%}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+  .stat-card{padding:20px;border-radius:22px;background:var(--surface);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+  .stat-card::after{content:"";position:absolute;inset:0;border-radius:22px;border:1px solid rgba(255,255,255,.5);pointer-events:none;mix-blend-mode:soft-light;opacity:.4}
+  .stat-card h3{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+  .stat-card .value{font-size:22px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+  .stat-card .note{font-size:12px;color:var(--muted)}
+  .progress-shell{margin-top:8px;background:var(--surface-soft);border-radius:999px;height:10px;overflow:hidden;border:1px solid rgba(21,50,59,.08)}
+  .progress-bar{height:100%;width:0;background:linear-gradient(90deg,#1d9a6c,#4cc28b);transition:width .3s ease}
+  .lesson-card{display:flex;flex-direction:column;gap:20px}
+  .exercise{min-height:250px}
+  .control-buttons{display:flex;flex-direction:column;gap:12px}
+  .row{display:flex;flex-direction:column;gap:12px}
+  .row.center{align-items:center;justify-content:center}
+  .gap-12{gap:12px}
   .center{text-align:center}
-  .tag{display:inline-flex;align-items:center;background:rgba(15,118,255,.08);border:1px solid rgba(59,130,246,.25);border-radius:999px;padding:6px 12px;font-size:12px;color:#bfdbfe;margin-right:8px;margin-bottom:8px}
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:10px}
-  .stat{position:relative;background:rgba(8,20,45,.95);border:1px solid rgba(94,234,212,.15);border-radius:16px;padding:12px 14px;font-size:13px;color:#cbd5e1;box-shadow:0 12px 24px rgba(13,42,80,.35)}
-  .stat .label{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:rgba(226,232,240,.7)}
-  .stat .value{margin-top:6px;font-size:18px;font-weight:700;color:#fff}
-  .stat .value span{font-size:15px;font-weight:600;color:#bae6fd}
-  .exercise{min-height:240px}
-  .option{display:block;background:rgba(13,23,48,.85);border:1px solid rgba(59,130,246,.25);border-radius:14px;padding:14px 16px;margin:10px 0;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
-  .option:hover{transform:translateY(-1px);box-shadow:0 12px 20px rgba(37,99,235,.25)}
-  .option.correct{border-color:rgba(34,197,94,.8);background:rgba(22,163,74,.25);box-shadow:0 12px 24px rgba(34,197,94,.25)}
-  .option.wrong{border-color:rgba(239,68,68,.7);background:rgba(239,68,68,.2);box-shadow:none}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.9);border:1px solid rgba(59,130,246,.3);color:#e5e7eb;padding:12px 18px;border-radius:14px;box-shadow:0 18px 30px rgba(15,23,42,.5)}
-  .hidden{display:none}
+  .foot{font-size:12px;color:var(--muted);margin-top:-4px}
+  .divider{height:1px;background:rgba(21,50,59,.08);margin:12px 0}
+  .exercise-title{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:12px}
   .chips{display:flex;flex-wrap:wrap;gap:10px}
-  .chip{background:linear-gradient(160deg,var(--chip),var(--chip2));border:1px solid rgba(37,99,235,.4);border-radius:12px;padding:7px 12px;cursor:pointer;transition:transform .15s ease,opacity .15s ease}
-  .chip:hover{transform:translateY(-2px)}
+  .chip{background:var(--surface-soft);border:1px solid var(--outline);border-radius:14px;padding:9px 12px;font-weight:600;font-size:16px;color:var(--text);cursor:pointer;transition:transform .15s ease,background .15s ease}
+  .chip:hover{transform:translateY(-1px)}
   .chip.disabled{opacity:.4;pointer-events:none;transform:none}
-  kbd{background:#0b1224;border:1px solid #1b2847;border-radius:6px;padding:2px 6px;font-size:12px}
-  .audio{cursor:pointer;padding:8px 12px;border-radius:999px;border:1px solid rgba(59,130,246,.4);background:rgba(14,23,45,.9);color:#93c5fd;transition:transform .15s ease}
-  .audio:hover{transform:translateY(-2px);color:#e0f2fe}
-  .muted{color:var(--muted)}
-  .foot{font-size:12px;color:var(--muted);margin-top:8px}
-  .divider{height:1px;background:rgba(59,130,246,.18);margin:10px 0}
-  .hearts{display:flex;gap:6px;font-size:20px;color:#fda4af}
-  .hearts .full{filter:drop-shadow(0 0 6px rgba(244,114,182,.6));}
-  .hearts .empty{color:rgba(248,113,113,.35)}
-  .progress{background:rgba(148,163,184,.25);border-radius:999px;height:10px;overflow:hidden;margin-top:8px}
-  .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .3s ease}
+  .option{display:block;background:var(--surface-soft);border:1px solid var(--outline);border-radius:18px;padding:14px 16px;margin:10px 0;font-size:16px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
+  .option:hover{transform:translateY(-1px);box-shadow:0 14px 24px rgba(24,76,55,.1)}
+  .option.correct{border-color:rgba(29,154,108,.7);background:rgba(29,154,108,.12);box-shadow:0 18px 24px rgba(29,154,108,.18)}
+  .option.wrong{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.12);box-shadow:none}
+  .audio{cursor:pointer;padding:10px 14px;border-radius:16px;border:1px solid rgba(23,121,87,.35);background:rgba(24,126,89,.12);color:#177957;transition:transform .15s ease}
+  .audio:hover{transform:translateY(-1px)}
+  .sentence-card{background:var(--surface-soft);border-radius:18px;padding:14px 16px;line-height:1.5}
   .fill-slots{display:flex;gap:8px;margin:14px 0 12px;flex-wrap:wrap}
-  .slot{width:46px;height:52px;border-radius:12px;border:2px dashed rgba(148,163,184,.4);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;background:rgba(13,23,48,.6);cursor:pointer;transition:border-color .2s ease,background .2s ease}
-  .slot.filled{border-style:solid;border-color:rgba(59,130,246,.6);background:rgba(37,99,235,.2)}
-  .sentence-card{background:rgba(15,23,42,.5);border-radius:14px;padding:12px 14px;margin-top:8px;line-height:1.5}
-  .exercise-title{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:rgba(190,227,248,.8)}
-  .tone-pad{display:grid;gap:10px;margin-top:16px;background:rgba(15,23,42,.7);border:1px solid rgba(59,130,246,.25);border-radius:16px;padding:14px}
+  .slot{width:52px;height:56px;border-radius:16px;border:2px dashed rgba(21,50,59,.2);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;background:rgba(255,255,255,.65);cursor:pointer;transition:border-color .2s ease,background .2s ease}
+  .slot.filled{border-style:solid;border-color:rgba(29,154,108,.6);background:rgba(29,154,108,.1)}
+  .tone-pad{display:grid;gap:12px;margin-top:18px;background:var(--surface-soft);border:1px solid var(--outline);border-radius:22px;padding:16px}
   .tone-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .tone-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:rgba(190,227,248,.75);padding-right:4px}
-  .tone-btn{background:rgba(37,99,235,.25);border:1px solid rgba(96,165,250,.45);border-radius:12px;padding:8px 12px;color:#e0f2fe;font-weight:600;font-size:16px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
-  .tone-btn:active{transform:scale(.96)}
+  .tone-label{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);padding-right:6px}
+  .tone-btn{background:#fff;border:1px solid rgba(23,121,87,.25);border-radius:14px;padding:8px 12px;color:#177957;font-weight:600;font-size:16px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+  .tone-btn:active{transform:scale(.95)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#16323b;color:#f8fffb;padding:14px 18px;border-radius:16px;box-shadow:0 24px 42px rgba(14,42,32,.3);border:1px solid rgba(255,255,255,.1);z-index:999}
+  .hidden{display:none}
+  .muted{color:var(--muted)}
+  .sentence-card .muted{color:var(--muted)}
+  .bottom-info{font-size:12px;color:var(--muted);text-align:center;padding-bottom:20px}
+  .hearts{display:flex;gap:6px;font-size:20px;color:#ff6f91}
+  .hearts .empty{opacity:.35}
+  code{background:var(--surface-soft);padding:2px 6px;border-radius:8px}
   @media (min-width:540px){
-    .btn{width:auto}
-    .select, select, input[type=number], input[type=text]{width:auto}
-  }
-  @media (min-width:680px){
-    .row{flex-direction:row;flex-wrap:wrap;align-items:center}
-    header .wrap{flex-direction:row;align-items:center}
-    h1{font-size:26px}
-    .pill{align-self:center}
+    body.app-shell{padding:40px 24px}
+    .row{flex-direction:row}
+    .control-buttons{flex-direction:row}
+    .control-buttons .btn{flex:1}
+    .hero-actions{flex-direction:row}
+    .hero-actions .btn{flex:1}
   }
   @media (min-width:768px){
-    main.app-main{padding-top:12px}
-    .grid{display:grid}
-    .g-2{grid-template-columns:1.1fr 0.9fr}
-    .g-3{grid-template-columns:repeat(3,1fr)}
-    .card{padding:24px}
-    .btn{width:auto}
-  }
-  @media (min-width:1024px){
-    .wrap{padding:28px 24px 40px}
+    .app-frame{width:min(960px,100%)}
+    header.app-header{padding:8px 12px}
+    .hero-card{flex-direction:row;align-items:center;gap:30px}
+    .hero-top{flex:1}
+    .hero-actions{width:220px}
+    .setup-card{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:flex-start}
+    .upload-actions{margin-top:0}
+    .stat-grid{grid-template-columns:repeat(4,1fr)}
+    .lesson-card{padding:32px}
   }
 </style>
 </head>
 <body class="app-shell">
-<header>
-  <div class="wrap row">
-    <h1 class="grow"><span>🎮</span>Chinese Trainer</h1>
-    <span class="pill">Loaded: <strong style="margin-left:6px"><?php echo htmlspecialchars($dataSource) ?></strong> · <?php echo $total ?> rows · dataset #<?php echo $hash ?></span>
-    <form method="post" enctype="multipart/form-data" class="row">
-      <input type="file" name="csv" accept=".csv,.tsv,text/csv,text/tab-separated-values">
-      <button class="btn">Upload CSV</button>
-    </form>
-    <form method="get" class="row">
-      <input type="hidden" name="clear" value="1">
-      <button class="btn secondary" title="Forget uploaded dataset from session">Reset dataset</button>
-    </form>
-  </div>
-</header>
-
-<main class="app-main">
-<div class="wrap">
-  <div class="grid g-2">
-    <div class="card">
-      <h3 style="margin:0 0 8px">Mission Control</h3>
-      <div class="divider"></div>
-      <div class="row gap-16">
-        <div class="col">
-          <label class="muted">Filter by Type</label>
-          <select id="typeFilter" class="select"></select>
-        </div>
-        <div class="col">
-          <label class="muted">Questions</label>
-          <input id="qCount" type="number" min="5" max="50" value="10">
-        </div>
-        <div class="col">
-          <label class="muted">Exercise Types</label>
-          <div class="row gap-12">
-            <label><input type="checkbox" class="et" value="mc_cn_en" checked> CN→EN</label>
-            <label><input type="checkbox" class="et" value="type_en_cn" checked> EN→CN</label>
-            <label><input type="checkbox" class="et" value="type_pinyin" checked> Pinyin</label>
-            <label><input type="checkbox" class="et" value="fill_blank" checked> Fill-in</label>
-            <label><input type="checkbox" class="et" value="order_pinyin" checked> Re-order</label>
-          </div>
-        </div>
-        <div class="col">
-          <label class="muted">Audio</label>
-          <div class="row gap-12">
-            <button id="testAudio" type="button" class="btn secondary">🔊 Test</button>
-            <span class="muted">Uses browser TTS (zh-CN)</span>
-          </div>
+  <div class="app-frame">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-icon">🈴</span>
+        <div class="brand-text">
+          <strong>Chinese Trainer</strong>
+          <span>Language journey dashboard</span>
         </div>
       </div>
-      <div style="margin-top:14px" class="row gap-12">
-        <button id="startBtn" class="btn">Launch Lesson</button>
-        <button id="reviewBtn" class="btn secondary">Quick Sprint (5)</button>
+      <div class="dataset-pill">
+        <span><?php echo $total ?> prompts</span>
+        <small>Loaded: <?php echo htmlspecialchars($dataSource) ?></small>
+        <small>ID #<?php echo $hash ?></small>
       </div>
-      <p class="foot">Tip: You can also keep a <code>data.csv</code> in this folder. Uploading a new file replaces the in-session dataset.</p>
-    </div>
+    </header>
 
-    <div class="card">
-      <h3 style="margin:0 0 8px">Player HUD</h3>
-      <div class="divider"></div>
-      <div class="stats">
-        <div class="stat">
-          <div class="label">Hearts</div>
+    <main class="app-content">
+      <section class="card hero-card">
+        <div class="hero-top">
+          <span class="eyebrow">Daily journey</span>
+          <h1>Build your Mandarin flow</h1>
+          <p>Practice with <?php echo $total ?> cards from the <?php echo htmlspecialchars($dataSource) ?> deck. Upload your own list whenever you're ready.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="startBtn" class="btn primary">Start lesson</button>
+          <button id="reviewBtn" class="btn ghost">Quick sprint (5)</button>
+        </div>
+      </section>
+
+      <section class="card setup-card">
+        <div>
+          <h2>Lesson setup</h2>
+          <p class="subtitle">Customize the run before you dive in.</p>
+          <div class="form-grid">
+            <label class="field">
+              <span>Filter by type</span>
+              <select id="typeFilter"></select>
+            </label>
+            <label class="field">
+              <span>Questions per run</span>
+              <input id="qCount" type="number" min="5" max="50" value="10">
+            </label>
+            <div class="field">
+              <span>Exercise focus</span>
+              <div class="checklist">
+                <label class="toggle"><input type="checkbox" class="et" value="mc_cn_en" checked> CN→EN</label>
+                <label class="toggle"><input type="checkbox" class="et" value="type_en_cn" checked> EN→CN</label>
+                <label class="toggle"><input type="checkbox" class="et" value="type_pinyin" checked> Pinyin</label>
+                <label class="toggle"><input type="checkbox" class="et" value="fill_blank" checked> Fill-in</label>
+                <label class="toggle"><input type="checkbox" class="et" value="order_pinyin" checked> Re-order</label>
+              </div>
+            </div>
+            <div class="field">
+              <span>Audio coach</span>
+              <div class="audio-hint">
+                <div class="audio-row">
+                  <button id="testAudio" type="button" class="btn secondary">🔊 Test voice</button>
+                  <span class="muted">Uses browser TTS (zh-CN)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="upload-actions">
+          <form method="post" enctype="multipart/form-data">
+            <label class="field">
+              <span>Import new deck</span>
+              <input type="file" name="csv" accept=".csv,.tsv,text/csv,text/tab-separated-values">
+            </label>
+            <button class="btn primary" type="submit">Upload CSV</button>
+          </form>
+          <form method="get">
+            <input type="hidden" name="clear" value="1">
+            <button class="btn secondary" type="submit" title="Forget uploaded dataset from session">Reset dataset</button>
+          </form>
+          <p class="foot">Tip: You can also keep a <code>data.csv</code> in this folder. Uploading a new file replaces the in-session dataset.</p>
+        </div>
+      </section>
+
+      <section class="stat-grid">
+        <div class="stat-card">
+          <h3>Hearts</h3>
           <div class="value hearts" id="hearts"></div>
         </div>
-        <div class="stat">
-          <div class="label">XP</div>
+        <div class="stat-card">
+          <h3>XP</h3>
           <div class="value"><span id="xp">0</span> pts</div>
         </div>
-        <div class="stat">
-          <div class="label">Question</div>
+        <div class="stat-card">
+          <h3>Question</h3>
           <div class="value"><span id="qpos">0/0</span></div>
+          <div class="progress-shell"><div class="progress-bar" id="progressBar"></div></div>
+          <span class="note">Lesson progress</span>
         </div>
-        <div class="stat">
-          <div class="label">Streak</div>
+        <div class="stat-card">
+          <h3>Streak</h3>
           <div class="value"><span id="streak">0</span> 🔥</div>
         </div>
-      </div>
-      <div class="divider"></div>
-      <div>
-        <div class="label" style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:rgba(148,163,184,.9)">Lesson Progress</div>
-        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
-      </div>
-      <div class="divider"></div>
-      <div class="row gap-12">
-        <span class="tag">Dataset hash: <?php echo $hash ?></span>
-        <span class="tag">Saved locally with key <code>cntrainer-<?php echo $hash ?></code></span>
-      </div>
+      </section>
+
+      <section id="card" class="card lesson-card">
+        <div id="exercise" class="exercise"></div>
+        <div id="controls" class="control-buttons">
+          <button id="skipBtn" class="btn secondary">Skip</button>
+          <button id="nextBtn" class="btn primary" disabled>Next</button>
+        </div>
+        <div id="explain" class="foot"></div>
+      </section>
+    </main>
+
+    <div class="bottom-info">
+      Dataset hash: <?php echo $hash ?> · Saved locally with key <code>cntrainer-<?php echo $hash ?></code>
     </div>
   </div>
 
-  <div id="card" class="card" style="margin-top:16px">
-    <div id="exercise" class="exercise"></div>
-    <div id="controls" class="row gap-12">
-      <button id="skipBtn" class="btn secondary">Skip</button>
-      <button id="nextBtn" class="btn" disabled>Next</button>
-    </div>
-    <div id="explain" class="foot"></div>
-  </div>
-</div>
-</main>
-
-<div id="toast" class="toast hidden"></div>
+  <div id="toast" class="toast hidden"></div>
 
 <script>
 /* ---------------------- Data bootstrap ---------------------- */
