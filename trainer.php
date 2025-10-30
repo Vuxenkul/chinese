@@ -157,29 +157,33 @@ $hash = substr(sha1($json), 0, 8);
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --bg:#020817;--bg-secondary:#0a1d3a;--card:#0d1730;--muted:#9ca3af;--fg:#f8fafc;--acc:#3b82f6;--acc2:#22d3ee;--good:#22c55e;--bad:#ef4444;
-    --warn:#f59e0b;--chip:#102041;--chip2:#0b1630;
+    --bg:#020817;--bg-secondary:#0a1d3a;--card:#0d1730;--muted:#9ca3af;--fg:#f8fafc;--acc:#3b82f6;--acc2:#22d3ee;--good:#22c55e;
+    --bad:#ef4444;--warn:#f59e0b;--chip:#102041;--chip2:#0b1630;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(circle at top,var(--bg-secondary),var(--bg));color:var(--fg);font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;min-height:100vh}
-  header{padding:16px;border-bottom:1px solid rgba(59,130,246,.2);background:rgba(3,8,24,.9);backdrop-filter:blur(12px);position:sticky;top:0;z-index:40}
-  .wrap{max-width:1100px;margin:0 auto;padding:18px}
-  h1{margin:0;font-size:26px;letter-spacing:.4px;display:flex;align-items:center;gap:10px}
+  body.app-shell{margin:0;background:radial-gradient(circle at top,var(--bg-secondary),var(--bg));color:var(--fg);font-family:"Nunito",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+  main.app-main{flex:1;display:flex}
+  header{padding:16px;border-bottom:1px solid rgba(59,130,246,.2);background:rgba(3,8,24,.92);backdrop-filter:blur(18px);position:sticky;top:0;z-index:40}
+  header .wrap{padding:0}
+  .wrap{width:100%;margin:0 auto;padding:18px 16px 26px;max-width:1024px}
+  h1{margin:0;font-size:24px;letter-spacing:.4px;display:flex;align-items:center;gap:10px}
   h1 span{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-size:18px}
-  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  .card{position:relative;background:linear-gradient(160deg,rgba(17,31,67,.9),rgba(9,20,44,.85));border:1px solid rgba(59,130,246,.2);border-radius:20px;padding:20px;box-shadow:0 18px 40px rgba(15,23,42,.35);overflow:hidden}
-  .card::after{content:"";position:absolute;inset:0;border-radius:20px;border:1px solid rgba(56,189,248,.08);pointer-events:none}
-  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(15,118,255,.12);border:1px solid rgba(37,99,235,.4);border-radius:999px;padding:7px 12px;color:#dbeafe;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  .row{display:flex;gap:12px;flex-direction:column;align-items:stretch}
+  .grow{flex:1}
+  .card{position:relative;background:linear-gradient(160deg,rgba(17,31,67,.92),rgba(9,20,44,.85));border:1px solid rgba(59,130,246,.24);border-radius:22px;padding:20px;box-shadow:0 18px 40px rgba(15,23,42,.35);overflow:hidden}
+  .card::after{content:"";position:absolute;inset:0;border-radius:22px;border:1px solid rgba(56,189,248,.08);pointer-events:none}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:rgba(15,118,255,.12);border:1px solid rgba(37,99,235,.4);border-radius:999px;padding:7px 12px;color:#dbeafe;font-size:12px;text-transform:uppercase;letter-spacing:.08em;align-self:flex-start}
   input[type=file]{color:#e0f2fe}
-  .btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:0;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(59,130,246,.35);transition:transform .15s ease,box-shadow .15s ease}
+  .btn{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:0;border-radius:14px;padding:12px 16px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(59,130,246,.35);transition:transform .15s ease,box-shadow .15s ease;width:100%;text-align:center}
   .btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(59,130,246,.45)}
   .btn:disabled{opacity:.6;cursor:not-allowed;box-shadow:none;transform:none}
   .btn.secondary{background:linear-gradient(135deg,#0f172a,#1e293b);box-shadow:none;border:1px solid rgba(148,163,184,.3)}
-  .select, select, input[type=number], input[type=text]{background:rgba(13,23,48,.85);border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:11px 14px;color:#e0f2fe}
-  .flex{display:flex}.col{display:flex;flex-direction:column}.grow{flex:1}
+  .select, select, input[type=number], input[type=text]{background:rgba(13,23,48,.85);border:1px solid rgba(59,130,246,.25);border-radius:12px;padding:11px 14px;color:#e0f2fe;width:100%}
+  .flex{display:flex}
+  .col{display:flex;flex-direction:column;gap:6px}
   .gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}.gap-24{gap:24px}
-  .grid{display:grid;gap:18px}
-  .g-2{grid-template-columns:repeat(2,1fr)} .g-3{grid-template-columns:repeat(3,1fr)}
+  .grid{display:flex;flex-direction:column;gap:18px}
+  .g-2,.g-3{gap:18px}
   .center{text-align:center}
   .tag{display:inline-flex;align-items:center;background:rgba(15,118,255,.08);border:1px solid rgba(59,130,246,.25);border-radius:999px;padding:6px 12px;font-size:12px;color:#bfdbfe;margin-right:8px;margin-bottom:8px}
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:10px}
@@ -214,9 +218,35 @@ $hash = substr(sha1($json), 0, 8);
   .slot.filled{border-style:solid;border-color:rgba(59,130,246,.6);background:rgba(37,99,235,.2)}
   .sentence-card{background:rgba(15,23,42,.5);border-radius:14px;padding:12px 14px;margin-top:8px;line-height:1.5}
   .exercise-title{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:rgba(190,227,248,.8)}
+  .tone-pad{display:grid;gap:10px;margin-top:16px;background:rgba(15,23,42,.7);border:1px solid rgba(59,130,246,.25);border-radius:16px;padding:14px}
+  .tone-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tone-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:rgba(190,227,248,.75);padding-right:4px}
+  .tone-btn{background:rgba(37,99,235,.25);border:1px solid rgba(96,165,250,.45);border-radius:12px;padding:8px 12px;color:#e0f2fe;font-weight:600;font-size:16px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+  .tone-btn:active{transform:scale(.96)}
+  @media (min-width:540px){
+    .btn{width:auto}
+    .select, select, input[type=number], input[type=text]{width:auto}
+  }
+  @media (min-width:680px){
+    .row{flex-direction:row;flex-wrap:wrap;align-items:center}
+    header .wrap{flex-direction:row;align-items:center}
+    h1{font-size:26px}
+    .pill{align-self:center}
+  }
+  @media (min-width:768px){
+    main.app-main{padding-top:12px}
+    .grid{display:grid}
+    .g-2{grid-template-columns:1.1fr 0.9fr}
+    .g-3{grid-template-columns:repeat(3,1fr)}
+    .card{padding:24px}
+    .btn{width:auto}
+  }
+  @media (min-width:1024px){
+    .wrap{padding:28px 24px 40px}
+  }
 </style>
 </head>
-<body>
+<body class="app-shell">
 <header>
   <div class="wrap row">
     <h1 class="grow"><span>🎮</span>Chinese Trainer</h1>
@@ -232,6 +262,7 @@ $hash = substr(sha1($json), 0, 8);
   </div>
 </header>
 
+<main class="app-main">
 <div class="wrap">
   <div class="grid g-2">
     <div class="card">
@@ -314,6 +345,7 @@ $hash = substr(sha1($json), 0, 8);
     <div id="explain" class="foot"></div>
   </div>
 </div>
+</main>
 
 <div id="toast" class="toast hidden"></div>
 
@@ -346,6 +378,126 @@ function sampleWrongOptions(correct, pool, key, n=3){
   const opts = uniq(pool.map(x=>x[key])).filter(x=>x && x!==correct);
   shuffle(opts);
   return opts.slice(0,n);
+}
+
+const TONE_GROUPS = [
+  {base:'a', tones:['ā','á','ǎ','à']},
+  {base:'e', tones:['ē','é','ě','è']},
+  {base:'i', tones:['ī','í','ǐ','ì']},
+  {base:'o', tones:['ō','ó','ǒ','ò']},
+  {base:'u', tones:['ū','ú','ǔ','ù']},
+  {base:'ü', tones:['ǖ','ǘ','ǚ','ǜ']}
+];
+const TONE_GROUP_MAP = {};
+TONE_GROUPS.forEach(group => { TONE_GROUP_MAP[group.base] = group; });
+TONE_GROUP_MAP['v'] = TONE_GROUP_MAP['ü'];
+const VOWEL_REGEX = /[aeiouvüAEIOUVÜ]/;
+
+function buildTonePad(){
+  return `
+    <div class="tone-pad" id="tonePad" role="group" aria-label="Pinyin tone helpers">
+      ${TONE_GROUPS.map(group => `
+        <div class="tone-group">
+          <span class="tone-label">${group.base.toUpperCase()}</span>
+          ${[group.base, ...group.tones].map(ch => `<button type="button" class="tone-btn" data-char="${ch}">${ch}</button>`).join('')}
+        </div>
+      `).join('')}
+      <div class="tone-group tone-actions">
+        <span class="tone-label">Tone #</span>
+        ${[1,2,3,4].map(n=>`<button type="button" class="tone-btn tone-number" data-tone="${n}">${n}</button>`).join('')}
+        <button type="button" class="tone-btn tone-number" data-tone="0">Reset</button>
+      </div>
+    </div>
+  `;
+}
+
+function insertAtCursor(input, text, selection){
+  if (!input) return 0;
+  const start = selection ? selection.start : (input.selectionStart ?? input.value.length);
+  const end = selection ? selection.end : (input.selectionEnd ?? input.value.length);
+  const value = input.value;
+  const nextValue = value.slice(0,start) + text + value.slice(end);
+  const pos = start + text.length;
+  input.value = nextValue;
+  input.focus();
+  input.setSelectionRange(pos, pos);
+  input.dispatchEvent(new Event('input', {bubbles:true}));
+  return pos;
+}
+
+function applyToneNumber(input, tone, selection){
+  if (!input || Number.isNaN(tone)) return 0;
+  let start = selection ? selection.start : (input.selectionStart ?? input.value.length);
+  let end = selection ? selection.end : (input.selectionEnd ?? input.value.length);
+  if (end !== start){
+    start = end;
+  }
+  let value = input.value;
+  if (start > 0 && /[1-5]/.test(value[start-1])){
+    value = value.slice(0,start-1) + value.slice(start);
+    input.value = value;
+    start -= 1;
+    input.setSelectionRange(start, start);
+  }
+  let targetIndex = -1;
+  for (let i = start-1; i >= 0; i--){
+    if (VOWEL_REGEX.test(value[i])){
+      targetIndex = i;
+      break;
+    }
+  }
+  if (targetIndex === -1){
+    input.focus();
+    input.setSelectionRange(start, start);
+    return start;
+  }
+  const targetChar = value[targetIndex];
+  const lower = targetChar.toLowerCase() === 'v' ? 'ü' : targetChar.toLowerCase();
+  const group = TONE_GROUP_MAP[lower];
+  if (!group){
+    input.focus();
+    input.setSelectionRange(start, start);
+    return start;
+  }
+  let replacement = tone === 0 ? group.base : group.tones[tone-1];
+  if (!replacement){
+    input.focus();
+    input.setSelectionRange(start, start);
+    return start;
+  }
+  if (targetChar === targetChar.toUpperCase() && targetChar.toLowerCase() !== targetChar.toUpperCase()){
+    replacement = replacement.toUpperCase();
+  }
+  const updated = value.slice(0,targetIndex) + replacement + value.slice(targetIndex+1);
+  input.value = updated;
+  input.focus();
+  input.setSelectionRange(start, start);
+  input.dispatchEvent(new Event('input', {bubbles:true}));
+  return start;
+}
+
+function attachTonePad(input){
+  const pad = document.querySelector('#tonePad');
+  if (!pad || !input) return;
+  const selection = {start: input.value.length, end: input.value.length};
+  const capture = () => {
+    selection.start = input.selectionStart ?? selection.start;
+    selection.end = input.selectionEnd ?? selection.end;
+  };
+  ['keyup','click','input','select'].forEach(evt => input.addEventListener(evt, capture));
+  pad.querySelectorAll('button[data-char]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selection.start = selection.end = insertAtCursor(input, btn.dataset.char, selection);
+      capture();
+    });
+  });
+  pad.querySelectorAll('button[data-tone]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = applyToneNumber(input, parseInt(btn.dataset.tone, 10), selection);
+      selection.start = selection.end = next;
+      capture();
+    });
+  });
 }
 
 function buildCharacterBank(word, sourcePool){
@@ -533,6 +685,7 @@ function render_type_en_cn(item){
 }
 
 function render_type_pinyin(item){
+  const tonePad = buildTonePad();
   $('#exercise').innerHTML = `
     <div class="exercise-title">Type the Pinyin</div>
     <div class="sentence-card" style="margin-bottom:12px">
@@ -540,18 +693,22 @@ function render_type_pinyin(item){
       ${item.english ? `<div class="muted" style="margin-top:8px">${escapeHTML(item.english)}</div>`:''}
     </div>
     <input id="ans" class="select" type="text" placeholder="e.g. zhe ge pingguo hen da" autocomplete="off" autofocus>
+    <p class="muted" style="font-size:12px;margin:6px 0 0">Tap a vowel or tone number to insert accents without typing them.</p>
+    ${tonePad}
     <div style="margin-top:14px" class="row gap-12">
       <button class="btn" id="checkBtn">Check</button>
       <button class="audio" onclick="speakCN(${JSON.stringify(item.chinese)})">🔊 Hear</button>
     </div>
   `;
+  const ans = $('#ans');
+  attachTonePad(ans);
   $('#checkBtn').addEventListener('click', ()=>{
-    const val = normalizePinyin($('#ans').value||'');
+    const val = normalizePinyin(ans.value||'');
     const target = normalizePinyin(item.pinyin||'');
     const ok = val === target;
     showResult(ok, item, `Pinyin: <b>${escapeHTML(item.pinyin||'')}</b>`);
   });
-  $('#ans').addEventListener('keydown', e=>{ if (e.key==='Enter'){ e.preventDefault(); $('#checkBtn').click(); } });
+  ans.addEventListener('keydown', e=>{ if (e.key==='Enter'){ e.preventDefault(); $('#checkBtn').click(); } });
 }
 
 function render_fill_blank(item){
